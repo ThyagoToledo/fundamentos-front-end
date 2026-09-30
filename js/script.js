@@ -29,6 +29,9 @@ const tecnologias = [
   },
 ];
 
+const chaveDadosContato = "experiencia-pratica-iii-contato";
+let dadosContatoSalvos = carregarDadosContato();
+
 const areaConteudo = document.querySelector("#conteudo-principal");
 const linksNavegacao = document.querySelectorAll("nav [data-page]");
 
@@ -75,6 +78,10 @@ function mostrarPagina(nomePagina) {
       </form>
     ` : ""}
   `;
+
+  if (nomePagina === "contato") {
+    restaurarDadosContato(areaConteudo.querySelector("#formulario-contato"));
+  }
 
   linksNavegacao.forEach((link) => {
     if (link.dataset.page === nomePagina) {
@@ -152,12 +159,60 @@ areaConteudo.addEventListener("submit", (evento) => {
 
   if (!formularioValido) return;
 
-  const nome = new FormData(formulario).get("nome");
+  const dadosContato = Object.fromEntries(new FormData(formulario));
+  const nome = dadosContato.nome;
   const retorno = document.querySelector("#retorno-formulario");
-  retorno.textContent = `Obrigado, ${nome}! Sua mensagem foi registrada nesta demonstração.`;
+
+  if (salvarDadosContato(dadosContato)) {
+    dadosContatoSalvos = dadosContato;
+    retorno.textContent = `Obrigado, ${nome}! Seus dados foram salvos neste navegador.`;
+  } else {
+    retorno.textContent = "Não foi possível salvar os dados neste navegador.";
+  }
+
   formulario.reset();
   document.querySelector("#previa-nome").textContent = "Digite seu nome para ver a prévia.";
 });
+
+function carregarDadosContato() {
+  try {
+    const dadosArmazenados = localStorage.getItem(chaveDadosContato);
+    if (!dadosArmazenados) return null;
+
+    const dados = JSON.parse(dadosArmazenados);
+    if (!dados || typeof dados !== "object") return null;
+
+    return {
+      nome: typeof dados.nome === "string" ? dados.nome : "",
+      email: typeof dados.email === "string" ? dados.email : "",
+      mensagem: typeof dados.mensagem === "string" ? dados.mensagem : "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function salvarDadosContato(dados) {
+  try {
+    localStorage.setItem(chaveDadosContato, JSON.stringify(dados));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function restaurarDadosContato(formulario) {
+  if (!formulario || !dadosContatoSalvos) return;
+
+  formulario.elements.nome.value = dadosContatoSalvos.nome;
+  formulario.elements.email.value = dadosContatoSalvos.email;
+  formulario.elements.mensagem.value = dadosContatoSalvos.mensagem;
+
+  if (dadosContatoSalvos.nome) {
+    document.querySelector("#previa-nome").textContent =
+      `Olá, ${dadosContatoSalvos.nome}! Sua mensagem está quase pronta.`;
+  }
+}
 
 function mostrarErro(campo, idMensagem, mensagem) {
   const elementoMensagem = document.querySelector(`#${idMensagem}`);
