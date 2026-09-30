@@ -48,3 +48,31 @@ main {
 .cartao-tecnologia p {
   margin-top: 0.5rem;
 }
+
+.cartao-tecnologia button,
+#formulario-contato button {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+#formulario-contato {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 32rem;
+  margin-top: 1.5rem;
+}
+
+#formulario-contato input,
+#formulario-contato textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem;
+  font: inherit;
+}
+
+#previa-nome,
+#retorno-formulario,
+.aviso-tecnologia {
+  color: #245c38;
+}
