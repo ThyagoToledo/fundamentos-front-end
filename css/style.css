@@ -1,0 +1,28 @@
+/* Estilos básicos da navegação da Experiência Prática III. */
+body {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  color: #222;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+nav a {
+  color: #0645ad;
+}
+
+nav a[aria-current="page"] {
+  font-weight: bold;
+}
+
+main {
+  min-height: 8rem;
+}
