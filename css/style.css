@@ -71,6 +71,17 @@ main {
   font: inherit;
 }
 
+#formulario-contato .campo-invalido {
+  border: 2px solid #b42318;
+  background-color: #fff5f4;
+}
+
+#formulario-contato .mensagem-erro {
+  min-height: 1em;
+  margin: 0;
+  color: #b42318;
+}
+
 #previa-nome,
 #retorno-formulario,
 .aviso-tecnologia {

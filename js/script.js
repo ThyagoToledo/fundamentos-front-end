@@ -59,12 +59,17 @@ function mostrarPagina(nomePagina) {
     <p>${pagina.conteudo}</p>
     ${listaTecnologias}
     ${nomePagina === "contato" ? `
-      <form id="formulario-contato">
+      <form id="formulario-contato" novalidate>
         <label for="nome-contato">Seu nome</label>
         <input id="nome-contato" name="nome" type="text" required>
+        <p class="mensagem-erro" id="erro-nome" aria-live="polite"></p>
         <p id="previa-nome" aria-live="polite">Digite seu nome para ver a prévia.</p>
+        <label for="email-contato">Seu e-mail</label>
+        <input id="email-contato" name="email" type="email" required>
+        <p class="mensagem-erro" id="erro-email" aria-live="polite"></p>
         <label for="mensagem-contato">Mensagem</label>
         <textarea id="mensagem-contato" name="mensagem" rows="4" required></textarea>
+        <p class="mensagem-erro" id="erro-mensagem" aria-live="polite"></p>
         <button type="submit">Enviar mensagem</button>
         <p id="retorno-formulario" role="status"></p>
       </form>
@@ -104,11 +109,26 @@ areaConteudo.addEventListener("click", (evento) => {
 });
 
 areaConteudo.addEventListener("input", (evento) => {
-  if (evento.target.id !== "nome-contato") return;
+  const campo = evento.target;
+
+  if (!campo.matches("#nome-contato, #email-contato, #mensagem-contato")) return;
+
+  if (campo.getAttribute("aria-invalid") === "true") {
+    const mensagem = obterMensagemErro(campo);
+    const idMensagem = {
+      "nome-contato": "erro-nome",
+      "email-contato": "erro-email",
+      "mensagem-contato": "erro-mensagem",
+    }[campo.id];
+
+    mostrarErro(campo, idMensagem, mensagem);
+  }
+
+  if (campo.id !== "nome-contato") return;
 
   const previa = document.querySelector("#previa-nome");
-  previa.textContent = evento.target.value
-    ? `Olá, ${evento.target.value}! Sua mensagem está quase pronta.`
+  previa.textContent = campo.value
+    ? `Olá, ${campo.value}! Sua mensagem está quase pronta.`
     : "Digite seu nome para ver a prévia.";
 });
 
@@ -117,12 +137,52 @@ areaConteudo.addEventListener("submit", (evento) => {
 
   evento.preventDefault();
 
-  const nome = new FormData(evento.target).get("nome");
+  const formulario = evento.target;
+  const campos = [
+    { campo: formulario.elements.nome, erro: "erro-nome" },
+    { campo: formulario.elements.email, erro: "erro-email" },
+    { campo: formulario.elements.mensagem, erro: "erro-mensagem" },
+  ];
+
+  const formularioValido = campos.reduce((valido, item) => {
+    const mensagem = obterMensagemErro(item.campo);
+    mostrarErro(item.campo, item.erro, mensagem);
+    return valido && !mensagem;
+  }, true);
+
+  if (!formularioValido) return;
+
+  const nome = new FormData(formulario).get("nome");
   const retorno = document.querySelector("#retorno-formulario");
   retorno.textContent = `Obrigado, ${nome}! Sua mensagem foi registrada nesta demonstração.`;
-  evento.target.reset();
+  formulario.reset();
   document.querySelector("#previa-nome").textContent = "Digite seu nome para ver a prévia.";
 });
+
+function mostrarErro(campo, idMensagem, mensagem) {
+  const elementoMensagem = document.querySelector(`#${idMensagem}`);
+  elementoMensagem.textContent = mensagem;
+  campo.classList.toggle("campo-invalido", Boolean(mensagem));
+  campo.setAttribute("aria-invalid", String(Boolean(mensagem)));
+}
+
+function obterMensagemErro(campo) {
+  if (!campo.value.trim()) {
+    const rotulos = {
+      "nome-contato": "nome",
+      "email-contato": "e-mail",
+      "mensagem-contato": "mensagem",
+    };
+
+    return `Preencha o campo ${rotulos[campo.id]}.`;
+  }
+
+  if (campo.type === "email" && !campo.validity.valid) {
+    return "Digite um endereço de e-mail válido.";
+  }
+
+  return "";
+}
 
 window.addEventListener("popstate", () => {
   mostrarPagina(window.location.hash.slice(1) || "inicio");
