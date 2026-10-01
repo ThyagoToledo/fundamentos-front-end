@@ -10,7 +10,11 @@ export function renderizarPagina(areaConteudo, nomePagina, paginas, tecnologias)
               <article class="cartao-tecnologia">
                 <h4>${tecnologia.nome}</h4>
                 <p>${tecnologia.descricao}</p>
-                <button type="button" data-tecnologia="${tecnologia.nome}">
+                <button
+                  type="button"
+                  data-tecnologia="${tecnologia.nome}"
+                  aria-label="Conhecer tecnologia: ${tecnologia.nome}"
+                >
                   Conhecer tecnologia
                 </button>
               </article>
@@ -23,7 +27,7 @@ export function renderizarPagina(areaConteudo, nomePagina, paginas, tecnologias)
 
   areaConteudo.innerHTML = `
     <section aria-labelledby="titulo-pagina">
-      <h2 id="titulo-pagina">${pagina.titulo}</h2>
+      <h2 id="titulo-pagina" tabindex="-1">${pagina.titulo}</h2>
       <p>${pagina.conteudo}</p>
       ${listaTecnologias}
       ${nomePagina === "contato" ? criarFormularioContato() : ""}

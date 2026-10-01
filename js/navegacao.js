@@ -1,8 +1,12 @@
 export function iniciarNavegacao(links, mostrarPagina, paginas) {
-  function navegarPara(nomePagina) {
+  function navegarPara(nomePagina, moverFoco = false) {
     const paginaAtual = paginas[nomePagina] ? nomePagina : "inicio";
     mostrarPagina(paginaAtual);
     atualizarLinkAtivo(links, paginaAtual);
+
+    if (moverFoco) {
+      document.querySelector("#titulo-pagina")?.focus();
+    }
   }
 
   links.forEach((link) => {
@@ -10,12 +14,12 @@ export function iniciarNavegacao(links, mostrarPagina, paginas) {
       evento.preventDefault();
       const nomePagina = link.dataset.page;
       history.pushState({ pagina: nomePagina }, "", `#${nomePagina}`);
-      navegarPara(nomePagina);
+      navegarPara(nomePagina, true);
     });
   });
 
   window.addEventListener("popstate", () => {
-    navegarPara(window.location.hash.slice(1) || "inicio");
+    navegarPara(window.location.hash.slice(1) || "inicio", true);
   });
 
   navegarPara(window.location.hash.slice(1) || "inicio");

@@ -8,6 +8,25 @@ body {
   line-height: 1.5;
 }
 
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+.pular-conteudo {
+  position: absolute;
+  top: -4rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.5rem 0.75rem;
+  color: #fff;
+  background-color: #222;
+}
+
+.pular-conteudo:focus-visible {
+  top: 1rem;
+}
+
 nav {
   display: flex;
   flex-wrap: wrap;
