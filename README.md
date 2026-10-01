@@ -110,6 +110,18 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
 
    A build é criada em `dist/`, que não é versionada. A pasta `imagens/` é copiada sem transformação; a otimização de imagens fica para uma etapa posterior.
 
+## Build e deploy
+
+A configuração de publicação prevista usa a Vercel como hospedagem estática. A raiz do projeto é a raiz do repositório; a instalação usa `npm ci`, o build usa `npm run build` e a saída publicada é `dist/`, conforme `vercel.json`. Após conectar o repositório GitHub à Vercel, configure `main` como branch de produção; pushes nessa branch podem então iniciar deploys automaticamente, enquanto outras branches podem gerar previews.
+
+Build local:
+
+```bash
+npm ci
+npm run build
+```
+
+URL de produção: pendente da conexão do repositório e da confirmação do primeiro deploy na Vercel.
 ## Versionamento
 
 O repositório usa Git e mantém a versão estável separada do desenvolvimento em andamento. A versão estável inicial é `v1.0.0`, marcada antes das tarefas da Experiência Prática IV.
