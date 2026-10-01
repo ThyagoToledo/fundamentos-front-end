@@ -4,10 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Experiência Prática III</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="../css/style.css">
-  <script src="../js/script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+  <script src="../js/script.js" type="module"></script>
 </head>
 <body>
+  <a class="pular-conteudo" href="#conteudo-principal">Pular para o conteúdo principal</a>
   <header>
     <h1>Experiência Prática III</h1>
     <nav aria-label="Navegação principal">
@@ -15,9 +18,12 @@
       <a href="#sobre" data-page="sobre">Sobre</a>
       <a href="#contato" data-page="contato">Contato</a>
     </nav>
+    <button id="alternar-tema" type="button" aria-pressed="false">
+      Modo escuro
+    </button>
   </header>
-  <main id="conteudo-principal" tabindex="-1" aria-live="polite">
-    <h2>Início</h2>
+  <main id="conteudo-principal" tabindex="-1">
+    <h2 id="titulo-pagina" tabindex="-1">Início</h2>
     <p>Bem-vindo à página inicial da Experiência Prática III.</p>
   </main>
 </body>

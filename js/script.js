@@ -1,247 +1,30 @@
-const paginas = {
-  inicio: {
-    titulo: "Início",
-    conteudo: "Bem-vindo à página inicial da Experiência Prática III.",
-    mostrarTecnologias: true,
-  },
-  sobre: {
-    titulo: "Sobre",
-    conteudo: "Esta é uma demonstração simples de navegação SPA com JavaScript.",
-  },
-  contato: {
-    titulo: "Contato",
-    conteudo: "Envie uma mensagem usando o formulário abaixo.",
-  },
-};
-
-const tecnologias = [
-  {
-    nome: "HTML",
-    descricao: "Organiza a estrutura e o conteúdo das páginas.",
-  },
-  {
-    nome: "CSS",
-    descricao: "Define a apresentação visual e o layout.",
-  },
-  {
-    nome: "JavaScript",
-    descricao: "Adiciona interatividade e atualiza o conteúdo da SPA.",
-  },
-];
-
-const chaveDadosContato = "experiencia-pratica-iii-contato";
-let dadosContatoSalvos = carregarDadosContato();
+import { paginas, tecnologias } from "./dados.js";
+import { renderizarPagina } from "./templates.js";
+import { iniciarNavegacao } from "./navegacao.js";
+import { iniciarEventos } from "./eventos.js";
+import { carregarDadosContato, restaurarDadosContato } from "./armazenamento.js";
+import { iniciarAlternanciaTema } from "./tema.js";
 
 const areaConteudo = document.querySelector("#conteudo-principal");
 const linksNavegacao = document.querySelectorAll("nav [data-page]");
+const botaoTema = document.querySelector("#alternar-tema");
+let dadosContatoSalvos = carregarDadosContato();
+
+iniciarAlternanciaTema(botaoTema);
 
 function mostrarPagina(nomePagina) {
-  const pagina = paginas[nomePagina] ?? paginas.inicio;
-
-  const listaTecnologias = pagina.mostrarTecnologias
-    ? `
-      <section aria-labelledby="titulo-tecnologias">
-        <h3 id="titulo-tecnologias">Tecnologias em estudo</h3>
-        <div class="lista-tecnologias">
-          ${tecnologias.map((tecnologia) => `
-            <article class="cartao-tecnologia">
-              <h4>${tecnologia.nome}</h4>
-              <p>${tecnologia.descricao}</p>
-              <button type="button" data-tecnologia="${tecnologia.nome}">
-                Conhecer tecnologia
-              </button>
-            </article>
-          `).join("")}
-        </div>
-      </section>
-    `
-    : "";
-
-  areaConteudo.innerHTML = `
-    <h2>${pagina.titulo}</h2>
-    <p>${pagina.conteudo}</p>
-    ${listaTecnologias}
-    ${nomePagina === "contato" ? `
-      <form id="formulario-contato" novalidate>
-        <label for="nome-contato">Seu nome</label>
-        <input id="nome-contato" name="nome" type="text" required>
-        <p class="mensagem-erro" id="erro-nome" aria-live="polite"></p>
-        <p id="previa-nome" aria-live="polite">Digite seu nome para ver a prévia.</p>
-        <label for="email-contato">Seu e-mail</label>
-        <input id="email-contato" name="email" type="email" required>
-        <p class="mensagem-erro" id="erro-email" aria-live="polite"></p>
-        <label for="mensagem-contato">Mensagem</label>
-        <textarea id="mensagem-contato" name="mensagem" rows="4" required></textarea>
-        <p class="mensagem-erro" id="erro-mensagem" aria-live="polite"></p>
-        <button type="submit">Enviar mensagem</button>
-        <p id="retorno-formulario" role="status"></p>
-      </form>
-    ` : ""}
-  `;
+  renderizarPagina(areaConteudo, nomePagina, paginas, tecnologias);
 
   if (nomePagina === "contato") {
-    restaurarDadosContato(areaConteudo.querySelector("#formulario-contato"));
+    restaurarDadosContato(
+      areaConteudo.querySelector("#formulario-contato"),
+      dadosContatoSalvos,
+    );
   }
-
-  linksNavegacao.forEach((link) => {
-    if (link.dataset.page === nomePagina) {
-      link.setAttribute("aria-current", "page");
-    } else {
-      link.removeAttribute("aria-current");
-    }
-  });
 }
 
-linksNavegacao.forEach((link) => {
-  link.addEventListener("click", (evento) => {
-    evento.preventDefault();
-    const nomePagina = link.dataset.page;
-    history.pushState({ pagina: nomePagina }, "", `#${nomePagina}`);
-    mostrarPagina(nomePagina);
-  });
+iniciarEventos(areaConteudo, (dados) => {
+  dadosContatoSalvos = dados;
 });
 
-areaConteudo.addEventListener("click", (evento) => {
-  const botaoTecnologia = evento.target.closest("[data-tecnologia]");
-
-  if (!botaoTecnologia) return;
-
-  const tecnologia = botaoTecnologia.dataset.tecnologia;
-  const cartao = botaoTecnologia.closest(".cartao-tecnologia");
-  const aviso = document.createElement("p");
-  aviso.className = "aviso-tecnologia";
-  aviso.textContent = `${tecnologia} selecionado para estudo.`;
-  cartao.querySelector(".aviso-tecnologia")?.remove();
-  cartao.append(aviso);
-});
-
-areaConteudo.addEventListener("input", (evento) => {
-  const campo = evento.target;
-
-  if (!campo.matches("#nome-contato, #email-contato, #mensagem-contato")) return;
-
-  if (campo.getAttribute("aria-invalid") === "true") {
-    const mensagem = obterMensagemErro(campo);
-    const idMensagem = {
-      "nome-contato": "erro-nome",
-      "email-contato": "erro-email",
-      "mensagem-contato": "erro-mensagem",
-    }[campo.id];
-
-    mostrarErro(campo, idMensagem, mensagem);
-  }
-
-  if (campo.id !== "nome-contato") return;
-
-  const previa = document.querySelector("#previa-nome");
-  previa.textContent = campo.value
-    ? `Olá, ${campo.value}! Sua mensagem está quase pronta.`
-    : "Digite seu nome para ver a prévia.";
-});
-
-areaConteudo.addEventListener("submit", (evento) => {
-  if (evento.target.id !== "formulario-contato") return;
-
-  evento.preventDefault();
-
-  const formulario = evento.target;
-  const campos = [
-    { campo: formulario.elements.nome, erro: "erro-nome" },
-    { campo: formulario.elements.email, erro: "erro-email" },
-    { campo: formulario.elements.mensagem, erro: "erro-mensagem" },
-  ];
-
-  const formularioValido = campos.reduce((valido, item) => {
-    const mensagem = obterMensagemErro(item.campo);
-    mostrarErro(item.campo, item.erro, mensagem);
-    return valido && !mensagem;
-  }, true);
-
-  if (!formularioValido) return;
-
-  const dadosContato = Object.fromEntries(new FormData(formulario));
-  const nome = dadosContato.nome;
-  const retorno = document.querySelector("#retorno-formulario");
-
-  if (salvarDadosContato(dadosContato)) {
-    dadosContatoSalvos = dadosContato;
-    retorno.textContent = `Obrigado, ${nome}! Seus dados foram salvos neste navegador.`;
-  } else {
-    retorno.textContent = "Não foi possível salvar os dados neste navegador.";
-  }
-
-  formulario.reset();
-  document.querySelector("#previa-nome").textContent = "Digite seu nome para ver a prévia.";
-});
-
-function carregarDadosContato() {
-  try {
-    const dadosArmazenados = localStorage.getItem(chaveDadosContato);
-    if (!dadosArmazenados) return null;
-
-    const dados = JSON.parse(dadosArmazenados);
-    if (!dados || typeof dados !== "object") return null;
-
-    return {
-      nome: typeof dados.nome === "string" ? dados.nome : "",
-      email: typeof dados.email === "string" ? dados.email : "",
-      mensagem: typeof dados.mensagem === "string" ? dados.mensagem : "",
-    };
-  } catch {
-    return null;
-  }
-}
-
-function salvarDadosContato(dados) {
-  try {
-    localStorage.setItem(chaveDadosContato, JSON.stringify(dados));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function restaurarDadosContato(formulario) {
-  if (!formulario || !dadosContatoSalvos) return;
-
-  formulario.elements.nome.value = dadosContatoSalvos.nome;
-  formulario.elements.email.value = dadosContatoSalvos.email;
-  formulario.elements.mensagem.value = dadosContatoSalvos.mensagem;
-
-  if (dadosContatoSalvos.nome) {
-    document.querySelector("#previa-nome").textContent =
-      `Olá, ${dadosContatoSalvos.nome}! Sua mensagem está quase pronta.`;
-  }
-}
-
-function mostrarErro(campo, idMensagem, mensagem) {
-  const elementoMensagem = document.querySelector(`#${idMensagem}`);
-  elementoMensagem.textContent = mensagem;
-  campo.classList.toggle("campo-invalido", Boolean(mensagem));
-  campo.setAttribute("aria-invalid", String(Boolean(mensagem)));
-}
-
-function obterMensagemErro(campo) {
-  if (!campo.value.trim()) {
-    const rotulos = {
-      "nome-contato": "nome",
-      "email-contato": "e-mail",
-      "mensagem-contato": "mensagem",
-    };
-
-    return `Preencha o campo ${rotulos[campo.id]}.`;
-  }
-
-  if (campo.type === "email" && !campo.validity.valid) {
-    return "Digite um endereço de e-mail válido.";
-  }
-
-  return "";
-}
-
-window.addEventListener("popstate", () => {
-  mostrarPagina(window.location.hash.slice(1) || "inicio");
-});
-
-const paginaInicial = window.location.hash.slice(1) || "inicio";
-mostrarPagina(paginaInicial);
+iniciarNavegacao(linksNavegacao, mostrarPagina, paginas);
