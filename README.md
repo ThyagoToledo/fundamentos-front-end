@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="imagens/estudos.jpg" alt="Pessoa estudando programação em um quarto com computador e referências de tecnologia" width="100%">
+  <img src="imagens/estudos.webp" alt="Pessoa estudando programação em um quarto com computador e referências de tecnologia" width="100%">
 </p>
 
 # Experiência Prática IV — Desenvolvimento Front-end
@@ -20,6 +20,7 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
 - Mensagem de sucesso com SweetAlert2 após salvar os dados.
 - Alternância entre temas claro e escuro, com preferência salva no `localStorage` e suporte à preferência de cores do sistema.
 - Link para pular ao conteúdo, foco visível e estrutura semântica com suporte a tecnologias assistivas.
+- Banner do README otimizado em WebP para reduzir transferência sem alterar suas dimensões.
 
 ## Tecnologias utilizadas
 
@@ -42,12 +43,12 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
 ├── dist/                         # gerada por npm run build; não versionada
 │   ├── assets/                   # CSS e JavaScript minificados com nomes hash
 │   ├── .gitkeep                  # arquivo vazio copiado da pasta pública
-│   ├── estudos.jpg               # cópia estática da pasta imagens/
+│   ├── estudos.webp              # cópia otimizada em WebP da pasta imagens/
 │   └── index.html
 ├── html/
 │   └── index.html
 ├── imagens/
-│   ├── estudos.jpg
+│   ├── estudos.webp
 │   └── .gitkeep
 ├── js/
 │   ├── armazenamento.js
