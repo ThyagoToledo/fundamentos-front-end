@@ -108,23 +108,27 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
    npm run preview
    ```
 
-   A build é criada em `dist/`, que não é versionada. A pasta `imagens/` é copiada sem transformação; a otimização de imagens fica para uma etapa posterior.
+   A build é criada em `dist/`, que não é versionada. O banner WebP de `imagens/` é copiado para a saída de produção sem nova transformação.
 
 ## Build e deploy
 
-A configuração de publicação prevista usa a Vercel como hospedagem estática. A raiz do projeto é a raiz do repositório; a instalação usa `npm ci`, o build usa `npm run build` e a saída publicada é `dist/`, conforme `vercel.json`. Após conectar o repositório GitHub à Vercel, configure `main` como branch de produção; pushes nessa branch podem então iniciar deploys automaticamente, enquanto outras branches podem gerar previews.
+A aplicação é hospedada na Vercel e conectada ao repositório [ThyagoToledo/fundamentos-front-end](https://github.com/ThyagoToledo/fundamentos-front-end). A branch de produção é `main`. A raiz do projeto é a raiz do repositório (`.`); a instalação usa `npm ci`, o build usa `npm run build` e a saída publicada é `dist/`, conforme `vercel.json`.
 
-Build local:
+A integração GitHub/Vercel inicia deployments automaticamente para commits integrados à `main`; branches não produtivas podem gerar previews. Um deployment Production iniciado pelo Vercel Bot foi confirmado para o commit de `main` `167ba33`.
+
+URL pública: [https://fundamentos-front-end.vercel.app](https://fundamentos-front-end.vercel.app).
+
+Para gerar e visualizar a build localmente:
 
 ```bash
 npm ci
 npm run build
+npm run preview
 ```
 
-URL de produção: pendente da conexão do repositório e da confirmação do primeiro deploy na Vercel.
 ## Versionamento
 
-O repositório usa Git e mantém a versão estável separada do desenvolvimento em andamento. A versão estável inicial é `v1.0.0`, marcada antes das tarefas da Experiência Prática IV.
+O repositório usa Git e mantém a versão estável separada do desenvolvimento em andamento. A tag estável inicial `v1.0.0` marcou a base anterior à Experiência Prática IV. As funcionalidades adicionadas nesta etapa são compatíveis e justificam a versão minor `v1.1.0`.
 
 ## GitFlow
 
@@ -159,4 +163,4 @@ O projeto usa versionamento semântico no formato `MAJOR.MINOR.PATCH`:
 - `MINOR`: funcionalidade nova compatível com o que já existia.
 - `PATCH`: correção compatível.
 
-A versão atual é `v1.0.0`, uma tag anotada que marca a base estável inicial. Existe a tag no repositório, mas ainda não há uma Release publicada na página de Releases do GitHub.
+A versão atual é `v1.1.0`, tag anotada que marca a conclusão compatível da Experiência Prática IV. `v1.0.0` permanece como a tag da base estável inicial. Ainda não há uma Release publicada na página de Releases do GitHub.
