@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="imagens/estudos.jpg" alt="Banner de estudos e programação" width="100%">
+  <img src="imagens/estudos.jpg" alt="Pessoa estudando programação em um quarto com computador e referências de tecnologia" width="100%">
 </p>
 
 # Experiência Prática IV — Desenvolvimento Front-end
