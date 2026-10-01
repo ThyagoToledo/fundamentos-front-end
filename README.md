@@ -18,23 +18,32 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
 - Formulário de contato com prévia do nome, validação de campos obrigatórios e formato do e-mail, e mensagens de erro junto aos campos.
 - Salvamento dos dados válidos no `localStorage` e restauração quando a seção Contato é aberta novamente.
 - Mensagem de sucesso com SweetAlert2 após salvar os dados.
+- Alternância entre temas claro e escuro, com preferência salva no `localStorage` e suporte à preferência de cores do sistema.
+- Link para pular ao conteúdo, foco visível e estrutura semântica com suporte a tecnologias assistivas.
 
 ## Tecnologias utilizadas
 
 - HTML5
 - CSS3
-- JavaScript com módulos ES6
-- APIs do navegador: DOM, History, `FormData` e `localStorage`
+- JavaScript com módulos ES6 e APIs do navegador: DOM, History, `FormData` e `localStorage`
+- Vite 8.3.1 e `html-minifier-terser` para desenvolvimento e build de produção
+- Node.js e npm para instalar e executar as ferramentas de build
 - SweetAlert2 11.26.25, carregada por CDN
 
 ## Estrutura de diretórios
 
 ```text
 .
+├── .gitignore
 ├── .github/
 │   └── PULL_REQUEST_TEMPLATE.md
 ├── css/
 │   └── style.css
+├── dist/                         # gerada por npm run build; não versionada
+│   ├── assets/                   # CSS e JavaScript minificados com nomes hash
+│   ├── .gitkeep                  # arquivo vazio copiado da pasta pública
+│   ├── estudos.jpg               # cópia estática da pasta imagens/
+│   └── index.html
 ├── html/
 │   └── index.html
 ├── imagens/
@@ -46,14 +55,18 @@ A interface atual ainda apresenta textos de demonstração da Experiência Prát
 │   ├── eventos.js
 │   ├── navegacao.js
 │   ├── script.js
+│   ├── tema.js
 │   ├── templates.js
 │   └── validacao.js
+├── package.json
+├── package-lock.json
+├── vite.config.js
 └── README.md
 ```
 
 ## Instalação e execução local
 
-O projeto não possui dependências locais de JavaScript, `package.json` ou etapa de build. O SweetAlert2 é carregado pela internet via CDN. Para servir a página localmente, é necessário ter Git e Python 3 disponíveis.
+É necessário ter Node.js `^20.19.0` ou `>=22.12.0` e npm. As ferramentas Vite e `html-minifier-terser` são dependências de desenvolvimento instaladas pelo npm. O SweetAlert2 continua sendo carregado pela internet via CDN.
 
 1. Clone o repositório:
 
@@ -73,15 +86,28 @@ O projeto não possui dependências locais de JavaScript, `package.json` ou etap
    git switch feature/experiencia-pratica-iv
    ```
 
-4. Inicie um servidor HTTP simples na raiz do projeto. No Windows, use:
+4. Instale as dependências de desenvolvimento:
 
-   ```powershell
-   py -m http.server 8000
+   ```bash
+   npm install
    ```
 
-   Em outros ambientes com Python 3, use `python3 -m http.server 8000`.
+5. Inicie o servidor de desenvolvimento do Vite:
 
-5. Abra [http://localhost:8000/html/](http://localhost:8000/html/) no navegador. Para encerrar o servidor, volte ao terminal e pressione `Ctrl+C`.
+   ```bash
+   npm run dev
+   ```
+
+   Abra o endereço local informado pelo Vite no terminal.
+
+6. Para gerar e visualizar a build de produção:
+
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+   A build é criada em `dist/`, que não é versionada. A pasta `imagens/` é copiada sem transformação; a otimização de imagens fica para uma etapa posterior.
 
 ## Versionamento
 
