@@ -1,26 +1,130 @@
-/* Estilos básicos da navegação da Experiência Prática III. */
+:root {
+  color-scheme: light;
+  --cor-fundo-pagina: #ffffff;
+  --cor-texto: #222222;
+  --cor-fundo-cabecalho: #f1f5f9;
+  --cor-link: #0645ad;
+  --cor-fundo-cartao: #f8fafc;
+  --cor-borda-cartao: #667085;
+  --cor-fundo-controle: #ffffff;
+  --cor-texto-controle: #222222;
+  --cor-borda-controle: #667085;
+  --cor-fundo-botao: #164d8f;
+  --cor-texto-botao: #ffffff;
+  --cor-borda-botao: #164d8f;
+  --cor-foco: #005fcc;
+  --cor-fundo-pular: #222222;
+  --cor-texto-pular: #ffffff;
+  --cor-erro: #b42318;
+  --cor-fundo-erro: #fef3f2;
+  --cor-status: #245c38;
+}
+
+:root[data-theme="escuro"] {
+  color-scheme: dark;
+  --cor-fundo-pagina: #111827;
+  --cor-texto: #f3f4f6;
+  --cor-fundo-cabecalho: #1f2937;
+  --cor-link: #93c5fd;
+  --cor-fundo-cartao: #1f2937;
+  --cor-borda-cartao: #9ca3af;
+  --cor-fundo-controle: #1f2937;
+  --cor-texto-controle: #f9fafb;
+  --cor-borda-controle: #9ca3af;
+  --cor-fundo-botao: #93c5fd;
+  --cor-texto-botao: #111827;
+  --cor-borda-botao: #93c5fd;
+  --cor-foco: #7ab8ff;
+  --cor-fundo-pular: #f9fafb;
+  --cor-texto-pular: #111827;
+  --cor-erro: #fda4af;
+  --cor-fundo-erro: #3b1f24;
+  --cor-status: #86efac;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --cor-fundo-pagina: #111827;
+    --cor-texto: #f3f4f6;
+    --cor-fundo-cabecalho: #1f2937;
+    --cor-link: #93c5fd;
+    --cor-fundo-cartao: #1f2937;
+    --cor-borda-cartao: #9ca3af;
+    --cor-fundo-controle: #1f2937;
+    --cor-texto-controle: #f9fafb;
+    --cor-borda-controle: #9ca3af;
+    --cor-fundo-botao: #93c5fd;
+    --cor-texto-botao: #111827;
+    --cor-borda-botao: #93c5fd;
+    --cor-foco: #7ab8ff;
+    --cor-fundo-pular: #f9fafb;
+    --cor-texto-pular: #111827;
+    --cor-erro: #fda4af;
+    --cor-fundo-erro: #3b1f24;
+    --cor-status: #86efac;
+  }
+}
+
 body {
   max-width: 48rem;
   margin: 0 auto;
   padding: 1.5rem;
-  color: #222;
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo-pagina);
   font-family: Arial, sans-serif;
   line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 3px;
+}
+
+.pular-conteudo {
+  position: absolute;
+  top: -4rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.5rem 0.75rem;
+  color: var(--cor-texto-pular);
+  background-color: var(--cor-fundo-pular);
+}
+
+.pular-conteudo:focus-visible {
+  top: 1rem;
+}
+
+header {
+  padding: 1rem;
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo-cabecalho);
+  border-radius: 0.75rem;
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin: 1rem 0 2rem;
+  margin: 1rem 0 1.5rem;
 }
 
 nav a {
-  color: #0645ad;
+  color: var(--cor-link);
 }
 
 nav a[aria-current="page"] {
   font-weight: bold;
+}
+
+button {
+  padding: 0.5rem 0.75rem;
+  color: var(--cor-texto-botao);
+  background-color: var(--cor-fundo-botao);
+  border: 2px solid var(--cor-borda-botao);
+  border-radius: 0.25rem;
+  font: inherit;
+  cursor: pointer;
 }
 
 main {
@@ -31,12 +135,16 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   gap: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .cartao-tecnologia {
   padding: 1rem;
-  border: 1px solid #ccc;
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo-cartao);
+  border: 1px solid var(--cor-borda-cartao);
   border-radius: 0.5rem;
 }
 
@@ -52,8 +160,6 @@ main {
 .cartao-tecnologia button,
 #formulario-contato button {
   margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
 }
 
 #formulario-contato {
@@ -68,22 +174,48 @@ main {
   width: 100%;
   box-sizing: border-box;
   padding: 0.6rem;
+  color: var(--cor-texto-controle);
+  background-color: var(--cor-fundo-controle);
+  border: 1px solid var(--cor-borda-controle);
+  border-radius: 0.25rem;
   font: inherit;
 }
 
 #formulario-contato .campo-invalido {
-  border: 2px solid #b42318;
-  background-color: #fff5f4;
+  border: 2px solid var(--cor-erro);
+  background-color: var(--cor-fundo-erro);
 }
 
 #formulario-contato .mensagem-erro {
   min-height: 1em;
   margin: 0;
-  color: #b42318;
+  color: var(--cor-erro);
 }
 
 #previa-nome,
 #retorno-formulario,
 .aviso-tecnologia {
-  color: #245c38;
+  color: var(--cor-status);
+}
+
+.swal2-popup {
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo-cartao);
+}
+
+.swal2-title,
+.swal2-html-container {
+  color: var(--cor-texto);
+}
+
+.swal2-styled.swal2-confirm {
+  color: var(--cor-texto-botao);
+  background-color: var(--cor-fundo-botao);
+  border: 2px solid var(--cor-borda-botao);
+}
+
+.swal2-popup :focus {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 3px;
+  box-shadow: none;
 }

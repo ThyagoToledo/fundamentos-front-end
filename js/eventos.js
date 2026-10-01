@@ -10,6 +10,7 @@ export function iniciarEventos(areaConteudo, aoSalvarDados) {
     const cartao = botaoTecnologia.closest(".cartao-tecnologia");
     const aviso = document.createElement("p");
     aviso.className = "aviso-tecnologia";
+    aviso.setAttribute("role", "status");
     aviso.textContent = `${tecnologia} selecionado para estudo.`;
     cartao.querySelector(".aviso-tecnologia")?.remove();
     cartao.append(aviso);
